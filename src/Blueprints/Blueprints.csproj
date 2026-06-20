@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Package">
+    <PackageId>ScottOffen.Blueprints</PackageId>
+    <Title>ScottOffen Blueprints</Title>
+    <Description>A collection of dotnet new templates for common project types and workflows.</Description>
+    <Authors>Scott Offen</Authors>
+    <Copyright>© $([System.DateTime]::UtcNow.Year) Scott Offen</Copyright>
+    <PackageTags>dotnet;templates;csharp</PackageTags>
+    <PackageProjectUrl>https://github.com/scottoffen/blueprints</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/scottoffen/blueprints</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>blueprint.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Template">
+    <PackageType>Template</PackageType>
+    <TargetFramework>net10.0</TargetFramework>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <LocalizeTemplates>false</LocalizeTemplates>
+  </PropertyGroup>
+
+  <ItemGroup Label="BuildPackages">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.9.50" Condition="!Exists('packages.config')">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Label="TemplateEngine">
+    <PackageReference Include="Microsoft.TemplateEngine.Tasks" Version="*" PrivateAssets="all" IsImplicitlyDefined="true"/>
+  </ItemGroup>
+
+  <ItemGroup Label="Content">
+    <Content Include="**\*" Exclude="content\**\bin\**;content\**\obj\**;content\**\openapi.json" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+
+  <ItemGroup Label="PackageContent">
+    <None Include="..\..\blueprint.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
