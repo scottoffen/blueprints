@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": ["GitHub", "OSS"],
+  "name": "GitHub Community Files",
+  "description": "Adds GitHub community files to the current directory.",
+  "identity": "ScottOffen.Blueprints.GitHub",
+  "shortName": "github",
+  "defaultName": "Blueprint",
+  "sourceName": "Blueprint",
+  "preferNameDirectory": false,
+  "tags": {
+    "language": "",
+    "type": "item"
+  },
+  "symbols": {
+    "org": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "scottoffen",
+      "description": "The GitHub organization name.",
+      "replaces": "$(GitHubOrg)"
+    },
+    "repo": {
+      "type": "parameter",
+      "datatype": "string",
+      "isRequired": true,
+      "description": "The GitHub repository name.",
+      "replaces": "$(GitHubRepo)"
+    }
+  },
+  "sources": [
+    {
+      "source": "../_shared/.github",
+      "target": "./.github/"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": ["GitHub", "OSS", "License"],
+  "name": "OSS Project Files",
+  "description": "Adds common OSS project files to the current directory.",
+  "identity": "ScottOffen.Blueprints.ProjectFiles",
+  "shortName": "repofiles",
+  "defaultName": "Blueprint",
+  "sourceName": "Blueprint",
+  "preferNameDirectory": false,
+  "tags": {
+    "language": "",
+    "type": "item"
+  },
+  "symbols": {
+    "org": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "scottoffen",
+      "description": "The GitHub organization name.",
+      "replaces": "$(GitHubOrg)"
+    },
+    "repo": {
+      "type": "parameter",
+      "datatype": "string",
+      "isRequired": true,
+      "description": "The GitHub repository name.",
+      "replaces": "$(GitHubRepo)"
+    },
+    "authorName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Scott Offen",
+      "description": "The name of the package author.",
+      "replaces": "$(AuthorName)"
+    },
+    "currentYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "$(CurrentYear)",
+      "parameters": {
+        "format": "yyyy"
+      }
+    }
+  },
+  "sources": [
+    {
+      "source": "../_shared",
+      "target": "./",
+      "include": [
+        ".editorconfig",
+        ".gitignore",
+        "LICENSE-MIT",
+        "LICENSE-APACHE"
+      ]
+    },
+    {
+      "source": "../_shared/.github",
+      "target": "./.github/"
+    }
+  ]
+}

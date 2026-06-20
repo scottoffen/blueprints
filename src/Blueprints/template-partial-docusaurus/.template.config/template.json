@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": ["Docusaurus", "Documentation"],
+  "name": "Docusaurus Setup Guide",
+  "description": "Adds a Docusaurus setup guide to the current directory.",
+  "identity": "ScottOffen.Blueprints.Docusaurus",
+  "shortName": "docs",
+  "tags": {
+    "language": "",
+    "type": "item"
+  },
+  "sources": [
+    {
+      "source": "../_shared",
+      "target": "./",
+      "include": [
+        "DOCUSAURUS.md"
+      ]
+    }
+  ]
+}

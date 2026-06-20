@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📘 Blueprint Documentation
+    url: https://$(GitHubOrg).github.io/$(GitHubRepo)
+    about: Start here. Many questions are answered in the official docs.
+  - name: 💬 Community Discussions
+    url: https://github.com/$(GitHubOrg)/$(GitHubRepo)/discussions
+    about: Propose ideas, ask how-to questions, and get community help.
+  - name: "🙋 StackOverflow #blueprint"
+    url: https://stackoverflow.com/questions/tagged/blueprint?sort=newest
+    about: Ask/answer usage questions with the blueprint tag.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/$(GitHubOrg)/$(GitHubRepo)/security/advisories/new
+    about: Please report vulnerabilities privately rather than as a public issue.

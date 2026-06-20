@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Blueprint.Tests/Blueprint.Tests.csproj" />
+  <Project Path="Blueprint/Blueprint.csproj" />
+</Solution>

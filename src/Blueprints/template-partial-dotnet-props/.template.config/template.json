@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": [
+    "MSBuild",
+    "Props"
+  ],
+  "name": "Directory Build Props",
+  "description": "Adds Directory.Build.props and version.json to the src directory.",
+  "identity": "ScottOffen.Blueprints.Props",
+  "shortName": "props",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "symbols": {
+    "authorName": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Scott Offen",
+      "description": "The name of the package author.",
+      "replaces": "$(AuthorName)"
+    },
+    "currentYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "$(CurrentYear)",
+      "parameters": {
+        "format": "yyyy"
+      }
+    },
+    "version": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "1.0.0-preview.{height}",
+      "description": "The initial version for Nerdbank.GitVersioning.",
+      "replaces": "$(VersionPrefix)"
+    }
+  },
+  "sources": [
+    {
+      "source": "../_shared/src",
+      "target": "./src/",
+      "include": [
+        "Directory.Build.props",
+        "version.json"
+      ]
+    }
+  ]
+}
