@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Blueprint</PackageId>
+    <Description><!-- Package description goes here --></Description>
+  </PropertyGroup>
+
+  <PropertyGroup Label="AOT">
+    <IsAotCompatible>true</IsAotCompatible>
+    <PublishAot>false</PublishAot>
+    <TrimMode>link</TrimMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Blueprint.Tests, PublicKey=$(BlueprintPublicKey)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": ["Testing", "Coverage"],
+  "name": "Test Coverage",
+  "description": "Adds test coverage tooling to the current directory.",
+  "identity": "ScottOffen.Blueprints.Coverage",
+  "shortName": "coverage",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  "sources": [
+    {
+      "source": "../_shared",
+      "target": "./",
+      "include": [
+        "test-coverage.ps1"
+      ]
+    },
+    {
+      "source": "../_shared/src",
+      "target": "./src/",
+      "include": [
+        ".config/dotnet-tools.json",
+        "coverlet.runsettings"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": ["Strong Naming", "Security"],
+  "name": "Strong Naming Guide",
+  "description": "Adds a strong naming guide to the current directory.",
+  "identity": "ScottOffen.Blueprints.StrongName",
+  "shortName": "strongname",
+  "tags": {
+    "language": "",
+    "type": "item"
+  },
+  "sources": [
+    {
+      "source": "../_shared",
+      "target": "./",
+      "include": [
+        "STRONG_NAMING.md"
+      ]
+    }
+  ]
+}

@@ -4,17 +4,19 @@ A collection of `dotnet new` templates for common project types and workflows.
 
 📖 [Documentation](https://scottoffen.github.io/blueprints)
 
-## Installation
+## Installing, Updating, and Uninstalling
+
+### Installation
 
 Blueprints is published to GitHub Packages. To install it, you'll need a GitHub
 personal access token (PAT) with at least `read:packages` scope.
 
-### 1. Create a PAT
+#### 1. Create a PAT
 
 Go to [GitHub Settings → Developer Settings → Personal Access Tokens](https://github.com/settings/tokens)
 and create a token with the `read:packages` scope.
 
-### 2. Store the PAT as an Environment Variable
+#### 2. Store the PAT as an Environment Variable
 
 Store your PAT as an environment variable rather than entering it in plain text on
 the command line.
@@ -34,7 +36,7 @@ $env:GITHUB_PAT = "your_pat_here"
 setx GITHUB_PAT "your_pat_here"
 ```
 
-### 3. Add the NuGet Source
+#### 3. Add the NuGet Source
 
 The `--name` flag sets the key used to identify this source in your local NuGet
 configuration. It can be anything you like -- the value below is just a suggestion.
@@ -63,13 +65,13 @@ dotnet nuget add source "https://nuget.pkg.github.com/scottoffen/index.json" ^
   --password %GITHUB_PAT%
 ```
 
-### 4. Install the Package
+#### 4. Install the Package
 
 ```bash
 dotnet new install ScottOffen.Blueprints
 ```
 
-## Updating
+### Updating
 
 To update to the latest version:
 
@@ -77,7 +79,7 @@ To update to the latest version:
 dotnet new update ScottOffen.Blueprints
 ```
 
-## Uninstalling
+### Uninstalling
 
 To remove the templates:
 
@@ -85,11 +87,31 @@ To remove the templates:
 dotnet new uninstall ScottOffen.Blueprints
 ```
 
-## Templates
+## Local Development
 
-| Short Name | Description |
-|------------|-------------|
-| _coming soon_ | _coming soon_ |
+To install the templates locally from source for testing:
+
+```bash
+dotnet new install src/Blueprints
+```
+
+To uninstall:
+
+```bash
+dotnet new uninstall src/Blueprints
+```
+
+After making changes to the templates, uninstall and reinstall to pick up the changes:
+
+```bash
+dotnet new uninstall src/Blueprints && dotnet new install src/Blueprints
+```
+
+To verify the templates are installed:
+
+```bash
+dotnet new list --author "Scott Offen"
+```
 
 ## Template Naming Convention
 
@@ -117,6 +139,12 @@ Template folder names follow the convention `template-[scope]-[ecosystem]-[descr
 
 **Descriptor** is a short name for what the template specifically creates, such as
 `osspkg`, `webapi`, `console`, `mysql`, or `postgres`.
+
+## Templates
+
+| Short Name | Description |
+|------------|-------------|
+| _coming soon_ | _coming soon_ |
 
 ## License
 

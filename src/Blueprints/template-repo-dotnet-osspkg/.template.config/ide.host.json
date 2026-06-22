@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json.schemastore.org/vs-2017.3.host",
+  "order": 0,
+  "symbolInfo": [
+    {
+      "id": "org",
+      "name": {
+        "text": "GitHub Organization"
+      },
+      "description": {
+        "text": "The GitHub organization or username that owns the repository."
+      },
+      "isVisible": true
+    },
+    {
+      "id": "repo",
+      "name": {
+        "text": "GitHub Repository Name"
+      },
+      "description": {
+        "text": "The GitHub repository name."
+      },
+      "isVisible": true
+    },
+    {
+      "id": "authorName",
+      "name": {
+        "text": "Author"
+      },
+      "description": {
+        "text": "The name of the package author."
+      },
+      "isVisible": true
+    },
+    {
+      "id": "version",
+      "name": {
+        "text": "Initial Version"
+      },
+      "description": {
+        "text": "The initial version for Nerdbank.GitVersioning."
+      },
+      "isVisible": true
+    }
+  ]
+}
