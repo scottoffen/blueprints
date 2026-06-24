@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Scott Offen",
+  "classifications": [
+    "Docker",
+    "PostgreSQL",
+    "MySQL",
+    "MSSQL"
+  ],
+  "identity": "ScottOffen.Blueprints.DockerDatabase",
+  "name": "Docker Database",
+  "shortName": "dockerdb",
+  "description": "Adds a docker-compose.yaml configured for a database provider.",
+  "defaultName": "Blueprint",
+  "sourceName": "Blueprint",
+  "preferNameDirectory": false,
+  "tags": {
+    "language": "",
+    "type": "item"
+  },
+  "symbols": {
+    "provider": {
+      "type": "parameter",
+      "datatype": "choice",
+      "displayName": "Database Provider",
+      "defaultValue": "postgres",
+      "choices": [
+        {
+          "choice": "postgres",
+          "displayName": "PostgreSQL"
+        },
+        {
+          "choice": "mysql",
+          "displayName": "MySQL"
+        },
+        {
+          "choice": "mssql",
+          "displayName": "Microsoft SQL Server"
+        }
+      ]
+    },
+    "dbname": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "appdb",
+      "replaces": "$(DatabaseName)"
+    },
+    "dbuser": {
+      "type": "parameter",
+      "datatype": "string"
+    },
+    "dbpwd": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "StrongPassword123!",
+      "replaces": "$(DatabasePwd)"
+    },
+    "dbport": {
+      "type": "parameter",
+      "datatype": "int"
+    },
+    "DbUserGenerated": {
+      "type": "generated",
+      "generator": "regex",
+      "parameters": {
+        "source": "dbname",
+        "steps": [
+          {
+            "regex": "$",
+            "replacement": "_user"
+          }
+        ]
+      }
+    },
+    "DbUserReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "dbuser",
+        "fallbackVariableName": "DbUserGenerated"
+      },
+      "replaces": "$(DatabaseUser)"
+    },
+    "DbPortGenerated": {
+      "type": "generated",
+      "generator": "switch",
+      "datatype": "string",
+      "parameters": {
+        "evaluator": "C++",
+        "cases": [
+          {
+            "condition": "(provider == 'mssql')",
+            "value": "1433"
+          },
+          {
+            "condition": "(provider == 'mysql')",
+            "value": "3306"
+          },
+          {
+            "condition": "(provider == 'postgres')",
+            "value": "5432"
+          },
+          {
+            "condition": "true",
+            "value": "5432"
+          }
+        ]
+      }
+    },
+    "DbPortReplacer": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "dbport",
+        "fallbackVariableName": "DbPortGenerated"
+      },
+      "replaces": "$(DatabasePort)"
+    }
+  },
+  "sources": [
+    {
+      "source": "../_shared/docker",
+      "condition": "(provider == 'postgres')",
+      "include": [
+        "docker-compose.postgres.yaml"
+      ],
+      "rename": {
+        "docker-compose.postgres.yaml": "docker-compose.yaml"
+      }
+    },
+    {
+      "source": "../_shared/docker",
+      "condition": "(provider == 'mysql')",
+      "include": [
+        "docker-compose.mysql.yaml"
+      ],
+      "rename": {
+        "docker-compose.mysql.yaml": "docker-compose.yaml"
+      }
+    },
+    {
+      "source": "../_shared/docker",
+      "condition": "(provider == 'mssql')",
+      "include": [
+        "docker-compose.mssql.yaml"
+      ],
+      "rename": {
+        "docker-compose.mssql.yaml": "docker-compose.yaml"
+      }
+    }
+  ]
+}
