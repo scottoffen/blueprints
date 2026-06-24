@@ -1,0 +1,154 @@
+# -------------------------------------------------------------------
+# PROJECT NAME
+#
+# This value defines the Docker Compose project name. Docker uses it
+# as a namespace for containers, networks, and volumes. If two compose
+# files use the same project name, they will share volumes and other
+# resources.
+#
+# This MUST be unique per project to avoid database collisions.
+# -------------------------------------------------------------------
+name: Blueprint
+
+services:
+  # -----------------------------------------------------------------
+  # DATABASE SERVICE
+  #
+  # The service name is used for Docker-internal DNS resolution and
+  # compose commands. Other containers can connect using this name
+  # as the host (for example: Host=db).
+  #
+  # The service name does not affect volume naming.
+  # -----------------------------------------------------------------
+  db:
+    # The SQL Server image is pinned to a major version. Pinning avoids
+    # unexpected breaking changes caused by automatic upgrades.
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+    # ---------------------------------------------------------------
+    # ENVIRONMENT VARIABLES
+    #
+    # These variables are required for SQL Server to start. Unlike
+    # Postgres and MySQL, SQL Server does not create a database or
+    # user automatically. Those steps must be handled separately
+    # using initialization scripts or migrations.
+    #
+    # The SA password must meet SQL Server complexity requirements.
+    # ---------------------------------------------------------------
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+      # If the password is too short, MSSQL will fail to start. The minimum length is 8 characters.
+      MSSQL_SA_PASSWORD: "$(DatabasePwd)"
+
+    # ---------------------------------------------------------------
+    # DATA PERSISTENCE
+    #
+    # This named volume stores SQL Server data files. Docker manages
+    # the volume and ensures data persists across container restarts
+    # and system reboots.
+    #
+    # The actual volume name created by Docker will be:
+    #   <project-name>_dbdata
+    #
+    # Keeping the volume name generic here allows Docker Compose to
+    # safely namespace it per project.
+    # ---------------------------------------------------------------
+    volumes:
+      - dbdata:/var/opt/mssql
+
+    # ---------------------------------------------------------------
+    # PORT MAPPING
+    #
+    # This exposes SQL Server to the host machine so tools like SSMS
+    # or Azure Data Studio can connect via localhost.
+    #
+    # Host ports must be unique across all running projects. If you
+    # run multiple SQL Server containers, either change the host port
+    # or remove this section entirely and connect only via Docker
+    # networking.
+    # ---------------------------------------------------------------
+    ports:
+      - "$(DatabasePort):1433"
+
+    # ---------------------------------------------------------------
+    # RESTART POLICY
+    #
+    # This ensures SQL Server restarts automatically after crashes
+    # or Docker daemon restarts, unless it is explicitly stopped.
+    # ---------------------------------------------------------------
+    restart: unless-stopped
+
+    # ---------------------------------------------------------------
+    # HEALTH CHECK
+    #
+    # This checks that SQL Server is accepting connections using the
+    # sqlcmd utility included in the image.
+    # ---------------------------------------------------------------
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "timeout 1 bash -c '</dev/tcp/127.0.0.1/1433'"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -----------------------------------------------------------------
+  # DATABASE INITIALIZATION SERVICE
+  #
+  # This one-time service initializes the database and user if they
+  # do not already exist. It waits for the database to be ready before
+  # running the initialization commands.
+  # -----------------------------------------------------------------
+  db_init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      db:
+        condition: service_started
+    restart: "no"
+    environment:
+      # If the password is too short, MSSQL will fail to start. The minimum length is 8 characters.
+      MSSQL_SA_PASSWORD: "$(DatabasePwd)"
+      DB_NAME: "$(DatabaseName)"
+      DB_USER: "$(DatabaseUser)"
+    entrypoint: >
+      /bin/bash -c "
+        echo \"Waiting for SQL Server...\";
+        until /opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null; do
+          echo \"sqlcmd failed - retrying in 2s...\";
+          sleep 2;
+        done;
+        echo \"SQL Server is up!\";
+
+        echo \"Checking for database $$DB_NAME...\";
+        DB_EXISTS=$$(/opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -h -1 -W -Q \"SET NOCOUNT ON; SELECT DB_ID(N'$$DB_NAME')\");
+
+        if [ \"$$DB_EXISTS\" != \"NULL\" ] && [ -n \"$$DB_EXISTS\" ]; then
+          echo \"Database exists, taking no further action.\";
+          exit 0;
+        else
+          echo \"Database does not exist, creating database and user.\";
+          /opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -b -Q \"CREATE DATABASE [$$DB_NAME];\"
+          /opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -b -d \"$$DB_NAME\" -Q \"CREATE LOGIN [$$DB_USER] WITH PASSWORD = N'$$MSSQL_SA_PASSWORD';\"
+          /opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -b -d \"$$DB_NAME\" -Q \"CREATE USER [$$DB_USER] FOR LOGIN [$$DB_USER];\"
+          /opt/mssql-tools/bin/sqlcmd -S db,1433 -U sa -P \"$$MSSQL_SA_PASSWORD\" -b -d \"$$DB_NAME\" -Q \"ALTER ROLE [db_owner] ADD MEMBER [$$DB_USER];\"
+          echo \"Database and user created successfully.\";
+          exit 0;
+        fi;
+      "
+
+# -------------------------------------------------------------------
+# VOLUMES
+#
+# The volume name should remain simple and generic. Docker Compose
+# automatically prefixes it with the project name, which prevents
+# collisions between projects.
+#
+# Do not mark this volume as external unless you intentionally want
+# multiple projects to share the same database.
+# -------------------------------------------------------------------
+volumes:
+  dbdata:
+    driver: local

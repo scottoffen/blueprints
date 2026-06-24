@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json.schemastore.org/vs-2017.3.host",
+  "order": 0,
+  "symbolInfo": [
+    {
+      "id": "provider",
+      "name": {
+        "text": "Database Provider"
+      },
+      "description": {
+        "text": "The database provider to configure."
+      },
+      "isVisible": true,
+      "choices": [
+        {
+          "choice": "postgres",
+          "displayName": "PostgreSQL"
+        },
+        {
+          "choice": "mysql",
+          "displayName": "MySQL"
+        },
+        {
+          "choice": "mssql",
+          "displayName": "Microsoft SQL Server"
+        }
+      ]
+    },
+    {
+      "id": "dbname",
+      "name": {
+        "text": "Database Name"
+      },
+      "description": {
+        "text": "The name of the database. Defaults to 'appdb'."
+      },
+      "isVisible": true,
+      "defaultValue": "appdb"
+    },
+    {
+      "id": "dbuser",
+      "name": {
+        "text": "Database User"
+      },
+      "description": {
+        "text": "The database username. Defaults to the database name with '_user' appended."
+      },
+      "isVisible": true
+    },
+    {
+      "id": "dbpwd",
+      "name": {
+        "text": "Database Password"
+      },
+      "description": {
+        "text": "The database password. Defaults to 'StrongPassword123!'."
+      },
+      "isVisible": true,
+      "defaultValue": "StrongPassword123!"
+    },
+    {
+      "id": "dbport",
+      "name": {
+        "text": "Port"
+      },
+      "description": {
+        "text": "The port to expose. Defaults to the standard port for the selected provider."
+      },
+      "isVisible": true
+    }
+  ]
+}
