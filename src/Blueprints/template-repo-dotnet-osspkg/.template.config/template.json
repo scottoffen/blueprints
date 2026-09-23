@@ -81,6 +81,7 @@
         ".config/dotnet-tools.json",
         "coverlet.runsettings",
         "Directory.Build.props",
+        "blueprint.png",
         "version.json"
       ]
     },

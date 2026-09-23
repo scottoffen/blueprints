@@ -43,6 +43,7 @@
       "target": "./src/",
       "include": [
         "Directory.Build.props",
+        "blueprint.png",
         "version.json"
       ]
     }
